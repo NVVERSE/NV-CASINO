@@ -5,6 +5,23 @@ from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, C
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
+from flask import Flask
+from threading import Thread
+
+# 🚀 FREE DEPLOYMENT SERVER (Render par bot ko hamesha zinda rakhne ke liye)
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Casino Bot is Running Free!"
+
+def run_server():
+    app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = Thread(target=run_server)
+    t.daemon = True
+    t.start()
 
 BOT_TOKEN = "8628180136:AAFWY3LDxM01xIV4hr19JNOXWcnc7cEJ8iQ"
 ADMINS = [7995159553]
@@ -65,10 +82,10 @@ async def process_amount(message: Message, state: FSMContext):
     await state.update_data(amount=amount)
     
     pay_text = (
-        f"💳 **UPI Payment Instructions**\n\n"
+        f"💳 {html.bold('UPI Payment Instructions')}\n\n"
         f"💵 Amount: {html.bold('₹' + str(amount))}\n"
         f"🆔 UPI ID: `{UPI_ID}`\n\n"
-        f"⚠️ **Steps:**\n"
+        f"⚠️ {html.bold('Steps:')}\n"
         f"1. Copy UPI ID and pay via PhonePe/GPay/Paytm.\n"
         f"2. Copy 12-digit UTR / Transaction ID.\n"
         f"3. Send UTR number here."
@@ -135,10 +152,6 @@ async def reject_deposit(callback: CallbackQuery):
         
     await callback.message.edit_text(text=callback.message.text + "\n\n❌ Rejected")
     await callback.answer()
-
-@dp.callback_query(F.data == "view_balance")
-except Exception:
-    pass
 
 @dp.callback_query(F.data == "view_balance")
 async def callback_balance(callback: CallbackQuery):
@@ -247,6 +260,7 @@ async def process_withdraw(callback: CallbackQuery):
 
 async def main():
     print("🤖 Bot started...")
+    keep_alive()  # Server chalu karega Render ke liye
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
