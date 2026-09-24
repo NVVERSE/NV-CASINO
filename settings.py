@@ -1,3 +1,4 @@
 BOT_TOKEN = "8628180136:AAFWY3LDxM01xIV4hr19JNOXWcnc7cEJ8iQ"
-ADMINS = [7995159553]
+ADMINS = [7995159553]  # आपकी एडमिन आईडी ब्रैकेट के अंदर आ गई
 TECH_SUPPORT_USER_ID = 7995159553
+UPI_ID = "shudhanshu539@slc"  
